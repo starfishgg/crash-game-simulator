@@ -12,7 +12,7 @@ body {
 
 /* Title */
 h1 {
-    font-size: 1.75em;
+    font-size: 28px;
     margin-bottom: 10px;
     letter-spacing: 1px;
     opacity: 0.9;
@@ -21,7 +21,7 @@ h1 {
 /* Balance panel */
 h2 {
     font-weight: normal;
-    font-size: 1.1em;
+    font-size: 18px;
     margin-bottom: 20px;
     padding: 10px 16px;
     background: rgba(255, 255, 255, 0.05);
@@ -32,7 +32,7 @@ h2 {
 
 /* Multiplier (main focus) */
 #multiplier {
-    font-size: 4em;
+    font-size: 64px;
     font-weight: bold;
     margin: 20px 0;
     color: #00ffcc;
@@ -44,7 +44,7 @@ h2 {
 button {
     padding: 12px 20px;
     margin: 6px;
-    font-size: 1em;
+    font-size: 16px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -67,7 +67,7 @@ button:active {
 /* Result text */
 #result {
     margin-top: 20px;
-    font-size: 1.1em;
+    font-size: 18px;
     min-height: 24px;
     opacity: 0.9;
 }
