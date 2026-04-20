@@ -7,7 +7,14 @@ let running = false;
 let playerActive = false;
 let roundEnded = false;
 let multiplier = 1.0;
+
 let speed = 0.05; // controls how fast it grows
+
+const eV = 0.97; // expected value, to ensure profitability
+const houseEdge = 1 - eV;
+const multiplierCap = 20;
+
+
 
 // Crash Point Tuning
 let K =3 // 3 = safe, 5 = balanced, 7 = agressive
@@ -28,22 +35,15 @@ function animate(timestamp) {
 
     let t = Math.pow(seconds * speed, 1.6);
     multiplier = 1 + t + Math.pow(t, 2.2) * 1.5;
-/*     let t = seconds * speed;
 
-    let slow = Math.pow(t, 1.8);
-
-    let fast = Math.exp(t) - 1;
-
-    let blend = Math.min(1, slow / 1.2);
-
-    // smooth exponential growth over time
-    multiplier = 1 + (slow * (1 - blend) + fast * blend); */
-
-    document.getElementById("multiplier").innerText = multiplier.toFixed(2) + "x";
-
+    // Update the multiplier inside this if/else so it doesn't get bigger than the crashpoint at high values
     if (multiplier >= crashPoint) {
+        document.getElementById("multiplier").innerText = crashPoint.toFixed(2) + "x";
         endRound();
         return;
+    }
+    else {
+        document.getElementById("multiplier").innerText = multiplier.toFixed(2) + "x";
     }
 
     requestAnimationFrame(animate);
@@ -63,31 +63,31 @@ function getCrashPoint() {
     // Simple "house edge" style randomness
     const r = Math.random();
 
-    // 3% ultra-fast crash branch
-    if (r < 0.03) {
+    // Ultra-fast crash branch (can allow us to have more long games if we implement)
+    if (r <= houseEdge) {
         return 1.01; // instant crash
     }
 
     // create a "crash curve"
     // Examples:
-// | r (Math.random) | raw = -ln(1 - r) | crash = 1 + raw * 5 |
-// | --------------- | ---------------- | ------------------- |
-// | 0.10            | 0.105            | 1.53x               |
-// | 0.25            | 0.288            | 2.44x               |
-// | 0.50            | 0.693            | 4.47x               |
-// | 0.70            | 1.204            | 7.02x               |
-// | 0.80            | 1.609            | 9.04x               |
-// | 0.90            | 2.303            | 12.52x              |
-// | 0.95            | 2.996            | 15.98x              |
-// | 0.97            | 3.507            | 18.53x              |
-// | 0.99            | 4.605            | 24.03x              |
+    // | r (Math.random) | 1 / (1 - r)
+    // | 0.10               1.11
+    // | 0.25               1.33
+    // | 0.50               2.00
+    // | 0.70               3.33
+    // | 0.80               5.00
+    // | 0.90              10.00
+    // | 0.95              20.00
+    // | 0.97              33.33
+    // | 0.99             100.00
+    raw = Math.min(r + 2 * houseEdge, 0.99); // be VERY careful adding on houseEdge to not become unprofitable. I believe we can afford it at the moment due to 20x multiplier cap being > 0.97% chance
 
-    let raw = -Math.log(1 - r);
-    let crash = 1 + raw * K;
-    
-    // clamp extremes
-    let crashPoint = Math.max(1.2, Math.min(crash, 50));
+    let crash = (1 - houseEdge) / (1 - raw);
 
+    // If we clamp extremes, we can probably allow more wiggle room for longer average games?
+    // currently taking a random amount betweeen 1 and 10 off if it got clamped at 20 multiplier to make it more 'random'.
+    let crashPoint = Math.min(crash, multiplierCap-Math.random()-Math.floor(Math.random() * 10));
+    //document.getElementById("debug").innerText = "CrashPoint: " + crashPoint.toFixed(2) + "x";
     return crashPoint;
 }
 

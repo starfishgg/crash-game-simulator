@@ -1,19 +1,29 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Crash Game Simulation</title>
-        <link rel="stylesheet" href="styles.css">
-        <script defer src="crash.js"></script>
-    </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crash Game Simulation</title>
+    <meta name="description" content="Crash Game Simulation">
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="crash.js"></script>
+</head>
 <body>
-    <h1>🚀 Crash Game Simulation</h1>
-    <h2>💰 Balance: €<span id="balance">10.00</span></h2>
-    <h2>💸 Cost to play: €<span id="cost">10.00</span></h2>
-    <div id="multiplier">1.00x</div>
-
-    <button onclick="startRound();">Start Round</button>
-    <button onmousedown="cashOut();">Cash Out</button>
-
-    <p id="result"></p>
+    <main class="app">
+        <header class="top">
+            <h1>🚀 Crash Game Simulation 🚀</h1>
+            <h2>💰 Balance: €<span id="balance">10.00</span></h2>
+            <h2>💸 Cost to play: €<span id="cost">10.00</span></h2>
+        </header>
+        <section class="middle">
+            <div id="multiplier">1.00x</div>
+            <p id="result"></p>
+        </section>
+        <footer class="bottom">
+            <button onclick="startRound();">Start Round</button>
+            <button onmousedown="cashOut();">Cash Out</button>
+            <p id="debug"></p>
+        </footer>
+    </main>
 </body>
 </html>
